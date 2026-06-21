@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DERCOMIA — Conditions & Confidentialité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --card:#FFFFFF;
+    --ink:#0A0A0A;
+    --ink-soft:#6B6B6B;
+    --rose:#0A0A0A;
+    --rose-deep:#0A0A0A;
+    --rose-pale:#F0F0F0;
+    --line:#E2E2E2;
+    --accent-dot:#0A0A0A;
+    --radius:22px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+
+  /* ---------- Top app bar ---------- */
+  .appbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,247,245,0.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:18px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.25rem;
+    letter-spacing:0.01em;
+  }
+  .brand .dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--accent-dot);
+    box-shadow:0 0 0 4px var(--rose-pale);
+  }
+  .brand-logo{
+    height:30px; width:auto; display:block;
+  }
+  .appbar nav{display:flex; gap:6px;}
+  .appbar nav button{
+    border:none; background:transparent;
+    font-family:'Manrope', sans-serif;
+    font-weight:700; font-size:0.82rem;
+    letter-spacing:0.03em; text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:10px 16px; border-radius:999px;
+    cursor:pointer; transition:.25s;
+  }
+  .appbar nav button.active{
+    background:var(--ink); color:#fff;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:64px 24px 40px;
+    max-width:760px; margin:0 auto;
+    text-align:left;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .watermark{
+    position:absolute; right:-30px; top:0;
+    height:230px; width:auto;
+    opacity:0.06;
+    filter:grayscale(1);
+    pointer-events:none;
+  }
+  .hero .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.78rem; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--rose-deep);
+    background:var(--rose-pale); padding:7px 14px; border-radius:999px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3.1rem);
+    line-height:1.08;
+    margin:0 0 18px;
+  }
+  .hero h1 em{ font-style:italic; color:var(--rose-deep); }
+  .hero p{
+    font-size:1.04rem; line-height:1.65;
+    color:var(--ink-soft); max-width:54ch; margin:0;
+  }
+  .hero .meta{
+    margin-top:28px;
+    display:flex; gap:28px; flex-wrap:wrap;
+  }
+  .hero .meta div{ font-size:0.82rem; color:var(--ink-soft); }
+  .hero .meta strong{ display:block; color:var(--ink); font-size:0.95rem; font-weight:700; }
+
+  /* ---------- Layout ---------- */
+  .wrap{ max-width:760px; margin:0 auto; padding:0 24px 120px; }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation:fade .35s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:14px;
+    overflow:hidden;
+    transition:border-color .2s;
+  }
+  .card[open]{ border-color:var(--rose); }
+  .card summary{
+    list-style:none;
+    cursor:pointer;
+    display:flex; align-items:center; gap:16px;
+    padding:20px 22px;
+  }
+  .card summary::-webkit-details-marker{ display:none; }
+  .num{
+    flex:none;
+    width:38px; height:38px; border-radius:50%;
+    background:var(--rose-pale);
+    color:var(--rose-deep);
+    font-family:'Fraunces', serif; font-weight:600; font-size:0.95rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card[open] .num{ background:var(--ink); color:#fff; }
+  .card summary .title{
+    flex:1;
+    font-weight:700; font-size:1rem; letter-spacing:0.01em;
+  }
+  .chev{
+    flex:none; width:30px; height:30px; border-radius:50%;
+    background:var(--rose-pale);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .25s;
+    color:var(--rose-deep); font-size:1rem; font-weight:700;
+  }
+  .card[open] .chev{ transform:rotate(45deg); background:var(--ink); color:#fff; }
+  .card .body{
+    padding:0 22px 24px 76px;
+    color:var(--ink-soft);
+    font-size:0.97rem;
+    line-height:1.7;
+  }
+  .card .body p{ margin:0 0 12px; }
+  .card .body p:last-child{ margin-bottom:0; }
+  .card .body ul{ margin:0 0 12px; padding-left:18px; }
+  .card .body li{ margin-bottom:6px; }
+  .card .body strong{ color:var(--ink); }
+  .badge{
+    display:inline-block;
+    font-size:0.7rem; font-weight:800; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--rose-deep); background:var(--rose-pale);
+    padding:3px 9px; border-radius:999px; margin-bottom:10px;
+  }
+
+  /* contact card */
+  .contact-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .contact-list li{
+    display:flex; align-items:center; gap:12px;
+    background:var(--bg); border:1px solid var(--line);
+    border-radius:14px; padding:12px 14px;
+  }
+  .contact-list .ico{
+    flex:none; width:30px; height:30px; border-radius:50%;
+    background:var(--rose-pale); color:var(--rose-deep);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .contact-list span.label{ font-size:0.74rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); display:block; }
+  .contact-list strong{ font-size:0.93rem; color:var(--ink); }
+
+  /* section intro */
+  .section-intro{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin:38px 0 18px;
+  }
+  .section-intro h2{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.4rem; margin:0;
+  }
+  .section-intro span{ font-size:0.8rem; color:var(--ink-soft); }
+
+  /* ---------- Bottom nav ---------- */
+  .bottombar{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    display:flex; justify-content:center;
+    padding:16px 16px calc(16px + env(safe-area-inset-bottom));
+    pointer-events:none;
+  }
+  .bottombar-inner{
+    pointer-events:auto;
+    background:var(--ink);
+    border-radius:999px;
+    padding:10px 14px;
+    display:flex; align-items:center; gap:6px;
+    box-shadow:0 16px 40px rgba(28,23,20,0.25);
+  }
+  .bottombar button{
+    border:none; background:transparent;
+    width:46px; height:46px; border-radius:50%;
+    color:#fff; opacity:0.55;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.2s;
+  }
+  .bottombar button.active{ opacity:1; background:#fff; color:var(--ink); }
+  .bottombar svg{ width:20px; height:20px; }
+
+  /* footer */
+  .foot{
+    margin-top:50px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:10px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .foot .dot{ color:var(--rose); }
+
+  @media (max-width:560px){
+    .card .body{ padding-left:22px; }
+    .appbar nav button{ padding:8px 11px; font-size:0.72rem; }
+    .hero{ padding-top:48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="brand"><img src="https://i.ibb.co/tMcDMMyY/Logo-Derco-Mia.png" alt="DercoMia" class="brand-logo"> DERCOMIA</div>
+  <nav>
+    <button class="active" data-target="cgu">CGU</button>
+    <button data-target="confidentialite">Confidentialité</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <img src="https://i.ibb.co/tMcDMMyY/Logo-Derco-Mia.png" alt="" class="watermark">
+  <span class="eyebrow">● Document légal · Algérie</span>
+  <h1>Politique de confidentialité, <em>Conditions Générales d’Utilisation.</em></h1>
+  <p>Conditions générales d'utilisation et politique de confidentialité de l'application DERCOMIA — produits dermocosmétiques et parfums, livrés en Algérie.</p>
+  <div class="meta">
+    <div><strong>13 articles</strong>CGU</div>
+    <div><strong>12 sections</strong>Confidentialité</div>
+    <div><strong>DZD</strong>Devise unique</div>
+    <div><strong>Loi algérienne</strong>Droit applicable</div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ===================== CGU ===================== -->
+  <div class="panel active" id="cgu">
+
+    <div class="section-intro">
+      <h2>Conditions générales d'utilisation</h2>
+      <span>13 articles</span>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="num">01</span><span class="title">Objet</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les présentes conditions définissent les règles d'utilisation de l'application <strong>DERCOMIA</strong>, plateforme de vente de produits dermocosmétiques et parfums opérant en Algérie.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">02</span><span class="title">Accès à l'application</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>L'accès à l'application est <strong>gratuit</strong>. L'achat de produits nécessite la création d'un compte utilisateur.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">03</span><span class="title">Création de compte</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>L'utilisateur s'engage à fournir des informations exactes (nom, email, téléphone, adresse). L'utilisateur est responsable de la sécurité de son compte.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">04</span><span class="title">Produits</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>DERCOMIA propose des produits dermocosmétiques et des parfums. Les descriptions et conseils sont fournis à titre informatif.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">05</span><span class="title">Commandes</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>La commande est validée après <strong>confirmation du panier</strong> par l'utilisateur. DERCOMIA se réserve le droit d'annuler une commande en cas de problème de stock ou de suspicion de fraude.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">06</span><span class="title">Prix et paiement</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les prix sont en <strong>Dinars Algériens (DZD)</strong>.</p>
+        <span class="badge">Modes de paiement</span>
+        <ul>
+          <li>Espèces à la livraison</li>
+          <li>Virement postal (CCP)</li>
+        </ul>
+        <p>Aucune donnée bancaire n'est stockée par l'application.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">07</span><span class="title">Livraison</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>La livraison est assurée par des transporteurs partenaires. L'utilisateur doit fournir une adresse exacte pour éviter tout retard.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">08</span><span class="title">Droit de rétractation (Retours)</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Conformément à la réglementation, l'utilisateur dispose d'un délai de <strong>10 jours ouvrables</strong> après réception pour retourner un produit.</p>
+        <span class="badge">Condition</span>
+        <p>Le produit doit être dans son emballage d'origine, non ouvert et non utilisé. Les produits ouverts ne sont pas remboursables pour des raisons d'hygiène.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">09</span><span class="title">Exclusion de responsabilité médicale</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les conseils fournis ont une visée <strong>purement cosmétique</strong>. Ils ne remplacent en aucun cas un diagnostic ou un traitement médical. Consultez un dermatologue pour tout problème de santé.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">10</span><span class="title">Propriété intellectuelle</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Tous les éléments de l'application (logos, textes, images) appartiennent à DERCOMIA. Toute copie est interdite.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">11</span><span class="title">Suppression du compte</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>L'utilisateur peut supprimer son compte et ses données à tout moment via le bouton dédié dans les paramètres de l'application.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">12</span><span class="title">Suspension de compte</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>DERCOMIA peut suspendre un compte en cas de fraude ou de non-respect des présentes conditions.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">13</span><span class="title">Droit applicable</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les présentes conditions sont régies par la <strong>loi algérienne</strong>.</p>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== Confidentialité ===================== -->
+  <div class="panel" id="confidentialite">
+
+    <div class="section-intro">
+      <h2>Politique de confidentialité</h2>
+      <span>12 sections</span>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="num">01</span><span class="title">Introduction</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>DERCOMIA s'engage à protéger la vie privée de ses utilisateurs et la sécurité de leurs données personnelles.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">02</span><span class="title">Données collectées</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Nous collectons :</p>
+        <ul>
+          <li>Nom, prénom, email, téléphone</li>
+          <li>Adresse de livraison</li>
+          <li>Photos envoyées pour conseil</li>
+          <li>Données techniques de connexion (via Firebase)</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">03</span><span class="title">Utilisation des données</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Vos données servent à gérer vos commandes, assurer la livraison, vous envoyer des notifications et améliorer votre expérience sur l'application.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">04</span><span class="title">Partage des données</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Vos informations de livraison sont partagées avec les transporteurs. Les données techniques sont traitées par <strong>Firebase (Google)</strong>.</p>
+        <p>Nous ne vendons jamais vos données.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">05</span><span class="title">Gestion des photos</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les photos envoyées pour conseil sont <strong>strictement confidentielles</strong> et utilisées uniquement par notre équipe de support.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">06</span><span class="title">Sécurité et stockage</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Les données sont sécurisées via le protocole SSL. Elles sont stockées via les services Firebase de Google.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">07</span><span class="title">Suppression des données</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Vous pouvez supprimer votre compte et l'intégralité de vos données personnelles directement depuis l'application via le menu « Paramètres ».</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">08</span><span class="title">Droits de l'utilisateur</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Vous avez le droit d'accéder à vos informations, de les modifier ou de demander leur <strong>suppression totale</strong>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">09</span><span class="title">Services tiers</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>L'application utilise Firebase et Google Analytics pour son fonctionnement technique.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">10</span><span class="title">Protection des mineurs</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>L'utilisation par des mineurs doit se faire sous la supervision d'un adulte.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">11</span><span class="title">Modifications</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>DERCOMIA peut modifier cette politique. Les utilisateurs seront informés en cas de changement majeur.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="num">12</span><span class="title">Contact délégué aux données</span><span class="chev">+</span></summary>
+      <div class="body">
+        <p>Pour toute question concernant vos données personnelles, contactez-nous à :</p>
+        <ul class="contact-list">
+          <li>
+            <span class="ico">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+            </span>
+            <div><span class="label">Email</span><strong>dercomia.app@gmail.com</strong></div>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="foot">
+    <span><img src="https://i.ibb.co/tMcDMMyY/Logo-Derco-Mia.png" alt="" style="height:18px;width:auto;vertical-align:-4px;margin-right:6px;filter:grayscale(1);"> DERCOMIA — Dermocosmétique & parfums</span>
+    <span>Mis à jour le 21 juin 2026</span>
+  </div>
+</div>
+
+<div class="bottombar">
+  <div class="bottombar-inner">
+    <button class="active" data-target="cgu" title="CGU">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+    </button>
+    <button data-target="confidentialite" title="Confidentialité">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const navButtons = document.querySelectorAll('.appbar nav button, .bottombar button');
+  const panels = document.querySelectorAll('.panel');
+
+  function setActive(target){
+    panels.forEach(p => p.classList.toggle('active', p.id === target));
+    navButtons.forEach(b => b.classList.toggle('active', b.dataset.target === target));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  navButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=> setActive(btn.dataset.target));
+  });
+</script>
+
+</body>
+</html>
